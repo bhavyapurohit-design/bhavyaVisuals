@@ -306,11 +306,31 @@
       position: absolute; inset: 0;
       background: rgba(0,0,0,0.4);
       display: flex; align-items: center; justify-content: center;
-      opacity: 0; transition: opacity 0.45s ease;
+      opacity: 0;
+      transition: opacity 0.45s ease;
       pointer-events: none;
       z-index: 1;
     }
-    .reel-item:hover .reel-video-wrap .play-overlay { opacity: 1; }
+    /* Only show overlay on desktop hover */
+    @media (min-width: 769px) {
+      .reel-item:hover .reel-video-wrap .play-overlay { 
+        opacity: 1; 
+      }
+    }
+    
+    /* CRITICAL FIX: Completely hide overlay on mobile */
+    @media (max-width: 768px) {
+      .reel-video-wrap .play-overlay {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      .reel-video-wrap video {
+        z-index: 3;
+        cursor: pointer;
+      }
+    }
+
     .reel-video-wrap .play-overlay .play-btn {
       width: 64px; height: 64px; border-radius: 50%;
       background: var(--gold); display: flex;
@@ -331,19 +351,6 @@
       border-radius: 100px; font-size: 0.65rem; font-weight: 500;
       color: var(--text-muted);
       border: 1px solid rgba(255,255,255,0.03);
-    }
-
-    /* CRITICAL FIX: Hide overlay on mobile for native controls */
-    @media (max-width: 768px) {
-      .reel-video-wrap .play-overlay {
-        display: none !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-      }
-      .reel-video-wrap video {
-        z-index: 3;
-        cursor: pointer;
-      }
     }
 
     @media (max-width: 992px) {
@@ -724,40 +731,34 @@
   revealElements.forEach(el => observer.observe(el));
   staggerElements.forEach(el => observer.observe(el));
 
-  // VIDEO CONTROLS FIX: Remove overlay click handlers that interfere with mobile
-  // Instead, let native controls handle everything
-  document.querySelectorAll('.reel-video-wrap').forEach(wrap => {
-    const video = wrap.querySelector('video');
-    const overlay = wrap.querySelector('.play-overlay');
-    if (!video || !overlay) return;
-    
-    // Only handle overlay click on desktop (non-mobile)
-    // The overlay is hidden on mobile via CSS
-    overlay.addEventListener('click', (e) => {
-      // On desktop, toggle play/pause when clicking overlay
-      if (window.innerWidth > 768) {
+  // SIMPLIFIED VIDEO HANDLING - Only for desktop hover effect
+  // No event listeners on mobile to prevent lag
+  if (window.innerWidth > 768) {
+    document.querySelectorAll('.reel-video-wrap').forEach(wrap => {
+      const video = wrap.querySelector('video');
+      const overlay = wrap.querySelector('.play-overlay');
+      if (!video || !overlay) return;
+      
+      // Only handle overlay click on desktop
+      overlay.addEventListener('click', (e) => {
         e.stopPropagation();
         video.paused ? video.play() : video.pause();
-      }
-    });
-    
-    // Update overlay visibility based on video state (desktop only)
-    video.addEventListener('play', () => {
-      if (window.innerWidth > 768) {
+      });
+      
+      // Update overlay visibility based on video state (desktop only)
+      video.addEventListener('play', () => {
         overlay.style.opacity = '0';
-      }
-    });
-    video.addEventListener('pause', () => {
-      if (window.innerWidth > 768 && video.currentTime > 0 && !video.ended) {
+      });
+      video.addEventListener('pause', () => {
+        if (video.currentTime > 0 && !video.ended) {
+          overlay.style.opacity = '1';
+        }
+      });
+      video.addEventListener('ended', () => {
         overlay.style.opacity = '1';
-      }
+      });
     });
-    video.addEventListener('ended', () => {
-      if (window.innerWidth > 768) {
-        overlay.style.opacity = '1';
-      }
-    });
-  });
+  }
 
   // auto aspect ratio
   document.querySelectorAll('.reel-video-wrap video').forEach(video => {
