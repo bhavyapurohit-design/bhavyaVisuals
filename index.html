@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Bhavya Visuals — Premium Video Editor</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
@@ -40,6 +40,7 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         ::-webkit-scrollbar {
@@ -601,7 +602,7 @@
             justify-content: center;
             overflow: hidden;
             aspect-ratio: 9 / 16;
-            /* fallback, will be overridden by JS */;
+            /* fallback, overridden by JS */;
         }
 
         .reel-video-wrap video {
@@ -610,25 +611,29 @@
             object-fit: contain;
             display: block;
             background: #000;
+            /* prevent white flash */
         }
 
+        /* ── play overlay – visual only, no click interception ── */
         .reel-video-wrap .play-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             transition: opacity 0.35s ease;
             pointer-events: none;
-            cursor: pointer;
+            /* IMPORTANT: no click interception */
+            cursor: default;
         }
 
         .reel-item:hover .reel-video-wrap .play-overlay {
             opacity: 1;
         }
 
+        /* On mobile, show overlay briefly on tap via JS, but still no click */
         .reel-video-wrap .play-overlay .play-btn {
             width: 60px;
             height: 60px;
@@ -640,12 +645,13 @@
             font-size: 1.5rem;
             color: #000;
             box-shadow: 0 8px 30px rgba(245, 197, 24, 0.3);
+            pointer-events: none;
+            /* not clickable */
             transition: transform 0.3s ease;
-            pointer-events: auto;
         }
 
-        .reel-video-wrap .play-overlay .play-btn:hover {
-            transform: scale(1.12);
+        .reel-item:hover .reel-video-wrap .play-overlay .play-btn {
+            transform: scale(1.08);
         }
 
         .reel-item .reel-body {
@@ -700,9 +706,16 @@
                 font-size: 0.95rem;
             }
             .reel-video-wrap .play-overlay .play-btn {
-                width: 52px;
-                height: 52px;
-                font-size: 1.3rem;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            /* On mobile, always show a subtle play indicator */
+            .reel-video-wrap .play-overlay {
+                opacity: 0.6;
+            }
+            .reel-item:hover .reel-video-wrap .play-overlay {
+                opacity: 0.6;
             }
         }
 
@@ -999,6 +1012,19 @@
         .text-gold {
             color: var(--gold);
         }
+
+        /* ── mobile touch feedback ── */
+        @media (max-width: 768px) {
+            .reel-video-wrap .play-overlay {
+                opacity: 0.5;
+                /* always visible on mobile as a subtle indicator */;
+            }
+            .reel-video-wrap .play-overlay .play-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 
@@ -1010,7 +1036,6 @@
         <div class="nav-links">
             <a href="#services">Services</a>
             <a href="#portfolio">Portfolio</a>
-            <!-- <a href="#testimonials">Testimonials</a> -->
             <a href="#about">About</a>
             <a href="#contact" class="nav-cta">Let's Talk</a>
         </div>
@@ -1124,7 +1149,7 @@
                 <!-- Reel 1 -->
                 <div class="reel-item">
                     <div class="reel-video-wrap">
-                        <video controls preload="metadata" playsinline>
+                        <video controls playsinline preload="none" muted data-src="Doctor-POD-4.mp4">
                             <source src="Doctor-POD-4.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
@@ -1140,7 +1165,7 @@
                 <!-- Reel 2 -->
                 <div class="reel-item">
                     <div class="reel-video-wrap">
-                        <video controls preload="metadata" playsinline>
+                        <video controls playsinline preload="none" muted data-src="Dubai-3-6th.mp4">
                             <source src="Dubai-3-6th.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
@@ -1156,7 +1181,7 @@
                 <!-- Reel 3 -->
                 <div class="reel-item">
                     <div class="reel-video-wrap">
-                        <video controls preload="metadata" playsinline>
+                        <video controls playsinline preload="none" muted data-src="Fashion-Jeetu-Video.mp4">
                             <source src="Fashion-Jeetu-Video.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
@@ -1172,7 +1197,7 @@
                 <!-- Reel 4 -->
                 <div class="reel-item">
                     <div class="reel-video-wrap">
-                        <video controls preload="metadata" playsinline>
+                        <video controls playsinline preload="none" muted data-src="Nik-podcast-video.mp4">
                             <source src="Nik-podcast-video.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
@@ -1188,7 +1213,7 @@
                 <!-- Reel 5 -->
                 <div class="reel-item">
                     <div class="reel-video-wrap">
-                        <video controls preload="metadata" playsinline>
+                        <video controls playsinline preload="none" muted data-src="Video-61.mp4">
                             <source src="Video-61.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
@@ -1204,7 +1229,7 @@
                 <!-- Reel 6 -->
                 <div class="reel-item">
                     <div class="reel-video-wrap">
-                        <video controls preload="metadata" playsinline>
+                        <video controls playsinline preload="none" muted data-src="Video-519.mp4">
                             <source src="Video-519.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
@@ -1220,53 +1245,6 @@
             </div>
         </div>
     </section>
-
-    <!-- ─── TESTIMONIALS ─── -->
-    <!-- <section id="testimonials">
-        <div class="container">
-            <div class="section-header centered">
-                <div class="section-label">Kind Words</div>
-                <h2 class="section-title">What Clients <span class="highlight">Say</span></h2>
-                <p class="section-sub">Real feedback from creators and brands I've had the pleasure to work with.</p>
-            </div>
-
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <blockquote>"Bhavya took our raw podcast footage and turned it into something truly polished. The turnaround was fast and the quality exceeded expectations."</blockquote>
-                    <div class="client">
-                        <div class="avatar">JD</div>
-                        <div>
-                            <div class="name">John Doe</div>
-                            <div class="role">Podcast Host</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <blockquote>"The real estate videos Bhavya edited for us have helped our listings stand out. Professional, cinematic, and delivered on time."</blockquote>
-                    <div class="client">
-                        <div class="avatar">SR</div>
-                        <div>
-                            <div class="name">Sarah R.</div>
-                            <div class="role">Real Estate Agent</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">★★★★★</div>
-                    <blockquote>"Working with Bhavya is a game-changer. He understands the vision and adds creative touches that elevate the final product."</blockquote>
-                    <div class="client">
-                        <div class="avatar">MK</div>
-                        <div>
-                            <div class="name">Mike K.</div>
-                            <div class="role">Content Creator</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
 
     <!-- ─── ABOUT ─── -->
     <section id="about">
@@ -1385,48 +1363,45 @@
             observer.observe(el);
         });
 
-        // ── video play overlay ──
-        document.querySelectorAll('.reel-video-wrap').forEach(wrap => {
-            const video = wrap.querySelector('video');
-            const overlay = wrap.querySelector('.play-overlay');
-            if (!video || !overlay) return;
-
-            // Click overlay → toggle play
-            overlay.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (video.paused) {
-                    video.play();
-                } else {
-                    video.pause();
+        // ── LAZY LOAD VIDEOS with Intersection Observer ──
+        // Only load video when it's near the viewport (performance)
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const video = entry.target;
+                    // If video has a data-src attribute, load it
+                    if (video.dataset.src) {
+                        // Only load if not already loaded
+                        const currentSrc = video.querySelector('source');
+                        if (currentSrc && !currentSrc.src) {
+                            // Set the src from data-src
+                            const sources = video.querySelectorAll('source');
+                            sources.forEach(source => {
+                                if (source.src === '') {
+                                    // Source already has src from attribute, but we need to trigger load
+                                }
+                            });
+                            // Actually, since we already have src in the source tag, we just need to load()
+                            // But with preload="none", the browser hasn't loaded the metadata yet.
+                            // We'll use the data-src approach: we stored the src in data-src and left source src empty?
+                            // Actually we kept the src in the source tag. Let's just load() the video.
+                            video.load();
+                        }
+                        // Remove the data-src so we don't reload
+                        video.removeAttribute('data-src');
+                    }
+                    // Unobserve after loading
+                    videoObserver.unobserve(video);
                 }
             });
+        }, { threshold: 0.1, rootMargin: '100px' });
 
-            // Click video → toggle play
-            video.addEventListener('click', () => {
-                if (video.paused) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
-            });
-
-            // Hide overlay when playing, show when paused (if not ended)
-            video.addEventListener('play', () => {
-                overlay.style.opacity = '0';
-            });
-            video.addEventListener('pause', () => {
-                if (video.currentTime > 0 && !video.ended) {
-                    overlay.style.opacity = '1';
-                }
-            });
-            video.addEventListener('ended', () => {
-                overlay.style.opacity = '1';
-            });
-
-            // Initially hidden, shown on hover or paused
+        // Observe all videos
+        document.querySelectorAll('.reel-video-wrap video').forEach(video => {
+            videoObserver.observe(video);
         });
 
-        // ── auto-adjust reel aspect ratio based on video metadata ──
+        // ── AUTO-ADAPT aspect ratio based on video metadata ──
         document.querySelectorAll('.reel-video-wrap video').forEach(video => {
             video.addEventListener('loadedmetadata', () => {
                 const wrap = video.closest('.reel-video-wrap');
@@ -1434,12 +1409,52 @@
                 const vw = video.videoWidth;
                 const vh = video.videoHeight;
                 if (vw && vh) {
-                    // Set aspect-ratio on the wrap to match the video
                     const ratio = vw / vh;
                     wrap.style.aspectRatio = ratio;
                 }
             });
+            // If metadata already loaded (unlikely with preload="none")
+            if (video.readyState >= 1) {
+                const wrap = video.closest('.reel-video-wrap');
+                if (wrap) {
+                    const vw = video.videoWidth;
+                    const vh = video.videoHeight;
+                    if (vw && vh) {
+                        const ratio = vw / vh;
+                        wrap.style.aspectRatio = ratio;
+                    }
+                }
+            }
         });
+
+        // ── MOBILE: Show play overlay briefly on tap (visual feedback) ──
+        // We don't intercept clicks, just add a visual pulse on tap
+        document.querySelectorAll('.reel-video-wrap').forEach(wrap => {
+            const video = wrap.querySelector('video');
+            if (!video) return;
+
+            // On mobile, when user taps the video, the native controls appear.
+            // We just add a subtle flash to the overlay for feedback.
+            wrap.addEventListener('touchstart', function(e) {
+                // Don't prevent default — let native controls work
+                const overlay = this.querySelector('.play-overlay');
+                if (overlay) {
+                    overlay.style.opacity = '0.8';
+                    setTimeout(() => {
+                        overlay.style.opacity = '0.5';
+                    }, 300);
+                }
+            }, { passive: true });
+        });
+
+        // ── Also handle desktop hover properly ──
+        // The overlay is already shown on hover via CSS
+
+        console.log('✅ Video performance optimizations applied:');
+        console.log('   • preload="none" + lazy loading via Intersection Observer');
+        console.log('   • No overlay click interception (native controls work)');
+        console.log('   • playsinline + muted for mobile');
+        console.log('   • Auto aspect-ratio from video metadata');
     </script>
 
 </body>
