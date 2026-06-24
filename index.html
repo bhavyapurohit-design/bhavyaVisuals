@@ -565,62 +565,71 @@
             line-height: 1.6;
         }
 
-        /* ── portfolio ── */
+        /* ── PORTFOLIO — GRID with 3 columns ── */
         #portfolio {
             background: var(--dark);
         }
 
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 28px;
         }
 
-        .video-card {
+        .reel-item {
             background: var(--dark-card);
             border-radius: var(--radius);
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all var(--transition);
-            cursor: pointer;
-            position: relative;
+            display: flex;
+            flex-direction: column;
         }
-        .video-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+
+        .reel-item:hover {
+            transform: translateY(-6px);
             border-color: rgba(245, 197, 24, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
 
-        .video-card .thumb {
+        .reel-video-wrap {
             position: relative;
-            overflow: hidden;
-            background: #0a0a0a;
-        }
-        .video-card .thumb video {
+            background: #000;
             width: 100%;
-            height: 280px;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.6s ease;
-        }
-        .video-card:hover .thumb video {
-            transform: scale(1.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            aspect-ratio: 9 / 16;
+            /* fallback, will be overridden by JS */;
         }
 
-        .video-card .thumb .play-overlay {
+        .reel-video-wrap video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: #000;
+        }
+
+        .reel-video-wrap .play-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            cursor: pointer;
         }
-        .video-card:hover .thumb .play-overlay {
+
+        .reel-item:hover .reel-video-wrap .play-overlay {
             opacity: 1;
         }
-        .video-card .thumb .play-overlay .play-btn {
+
+        .reel-video-wrap .play-overlay .play-btn {
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -628,45 +637,72 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #000;
             box-shadow: 0 8px 30px rgba(245, 197, 24, 0.3);
-            transition: transform 0.3s;
-        }
-        .video-card:hover .thumb .play-overlay .play-btn {
-            transform: scale(1.1);
+            transition: transform 0.3s ease;
+            pointer-events: auto;
         }
 
-        .video-card .card-body {
-            padding: 20px 24px 24px;
+        .reel-video-wrap .play-overlay .play-btn:hover {
+            transform: scale(1.12);
         }
-        .video-card .card-body h3 {
+
+        .reel-item .reel-body {
+            padding: 16px 18px 20px;
+            flex: 1;
+        }
+
+        .reel-item .reel-body h3 {
             font-size: 1rem;
             font-weight: 600;
             color: #fff;
+            letter-spacing: -0.01em;
         }
-        .video-card .card-body .tags {
+
+        .reel-item .reel-body .tags {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            margin-top: 10px;
+            margin-top: 8px;
         }
-        .video-card .card-body .tags span {
+
+        .reel-item .reel-body .tags span {
             background: rgba(255, 255, 255, 0.06);
             padding: 3px 12px;
             border-radius: 100px;
             font-size: 0.65rem;
             font-weight: 500;
             color: var(--text-muted);
-            letter-spacing: 0.02em;
+            letter-spacing: 0.03em;
+        }
+
+        /* responsive grid */
+        @media (max-width: 992px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
         }
 
         @media (max-width: 600px) {
             .portfolio-grid {
                 grid-template-columns: 1fr;
+                gap: 28px;
             }
-            .video-card .thumb video {
-                height: 200px;
+            .reel-video-wrap {
+                aspect-ratio: 9 / 16;
+            }
+            .reel-item .reel-body {
+                padding: 14px 16px 18px;
+            }
+            .reel-item .reel-body h3 {
+                font-size: 0.95rem;
+            }
+            .reel-video-wrap .play-overlay .play-btn {
+                width: 52px;
+                height: 52px;
+                font-size: 1.3rem;
             }
         }
 
@@ -948,7 +984,7 @@
             color: var(--gold);
         }
 
-        /* ── scroll reveal (simple) ── */
+        /* ── scroll reveal ── */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -963,18 +999,6 @@
         .text-gold {
             color: var(--gold);
         }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mt-16 {
-            margin-top: 16px;
-        }
-        .mt-24 {
-            margin-top: 24px;
-        }
-        .mt-32 {
-            margin-top: 32px;
-        }
     </style>
 </head>
 
@@ -986,7 +1010,7 @@
         <div class="nav-links">
             <a href="#services">Services</a>
             <a href="#portfolio">Portfolio</a>
-            <a href="#testimonials">Testimonials</a>
+            <!-- <a href="#testimonials">Testimonials</a> -->
             <a href="#about">About</a>
             <a href="#contact" class="nav-cta">Let's Talk</a>
         </div>
@@ -1086,103 +1110,109 @@
         </div>
     </section>
 
-    <!-- ─── PORTFOLIO ─── -->
+    <!-- ─── PORTFOLIO — GRID with 3 columns ─── -->
     <section id="portfolio">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header centered">
                 <div class="section-label">Portfolio</div>
                 <h2 class="section-title">Featured <span class="highlight">Projects</span></h2>
                 <p class="section-sub">Each edit is crafted with precision and a storyteller's eye.</p>
             </div>
 
-            <div class="portfolio-grid">
+            <div class="portfolio-grid" id="portfolioGrid">
 
-                <div class="video-card">
-                    <div class="thumb">
-                        <video controls preload="metadata">
+                <!-- Reel 1 -->
+                <div class="reel-item">
+                    <div class="reel-video-wrap">
+                        <video controls preload="metadata" playsinline>
                             <source src="Doctor-POD-4.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
                             <div class="play-btn">▶</div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h3>Podcast Highlights</h3>
+                    <div class="reel-body">
+                        <h3>🎙️ Podcast Highlights</h3>
                         <div class="tags"><span>Podcast</span><span>Talk Show</span></div>
                     </div>
                 </div>
 
-                <div class="video-card">
-                    <div class="thumb">
-                        <video controls preload="metadata">
+                <!-- Reel 2 -->
+                <div class="reel-item">
+                    <div class="reel-video-wrap">
+                        <video controls preload="metadata" playsinline>
                             <source src="Dubai-3-6th.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
                             <div class="play-btn">▶</div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h3>Luxury Real Estate</h3>
+                    <div class="reel-body">
+                        <h3>🏙️ Luxury Real Estate</h3>
                         <div class="tags"><span>Real Estate</span><span>Luxury</span></div>
                     </div>
                 </div>
 
-                <div class="video-card">
-                    <div class="thumb">
-                        <video controls preload="metadata">
+                <!-- Reel 3 -->
+                <div class="reel-item">
+                    <div class="reel-video-wrap">
+                        <video controls preload="metadata" playsinline>
                             <source src="Fashion-Jeetu-Video.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
                             <div class="play-btn">▶</div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h3>Growth &amp; Educational</h3>
+                    <div class="reel-body">
+                        <h3>📈 Growth &amp; Educational</h3>
                         <div class="tags"><span>Educational</span><span>Social Media</span></div>
                     </div>
                 </div>
 
-                <div class="video-card">
-                    <div class="thumb">
-                        <video controls preload="metadata">
+                <!-- Reel 4 -->
+                <div class="reel-item">
+                    <div class="reel-video-wrap">
+                        <video controls preload="metadata" playsinline>
                             <source src="Nik-podcast-video.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
                             <div class="play-btn">▶</div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h3>Interview Style Podcast</h3>
+                    <div class="reel-body">
+                        <h3>🎤 Interview Style Podcast</h3>
                         <div class="tags"><span>Podcast</span><span>Interview</span></div>
                     </div>
                 </div>
 
-                <div class="video-card">
-                    <div class="thumb">
-                        <video controls preload="metadata">
+                <!-- Reel 5 -->
+                <div class="reel-item">
+                    <div class="reel-video-wrap">
+                        <video controls preload="metadata" playsinline>
                             <source src="Video-61.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
                             <div class="play-btn">▶</div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h3>Educational Explainer</h3>
+                    <div class="reel-body">
+                        <h3>🧠 Educational Explainer</h3>
                         <div class="tags"><span>Education</span><span>Explainer</span></div>
                     </div>
                 </div>
 
-                <div class="video-card">
-                    <div class="thumb">
-                        <video controls preload="metadata">
+                <!-- Reel 6 -->
+                <div class="reel-item">
+                    <div class="reel-video-wrap">
+                        <video controls preload="metadata" playsinline>
                             <source src="Video-519.mp4" type="video/mp4" />
                         </video>
                         <div class="play-overlay">
                             <div class="play-btn">▶</div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <h3>Real Estate Showcase</h3>
+                    <div class="reel-body">
+                        <h3>🏡 Real Estate Showcase</h3>
                         <div class="tags"><span>Real Estate</span><span>Property</span></div>
                     </div>
                 </div>
@@ -1334,7 +1364,7 @@
             }
         });
 
-        // ── scroll reveal (simple intersection observer) ──
+        // ── scroll reveal ──
         const reveals = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1344,55 +1374,71 @@
             });
         }, { threshold: 0.2 });
 
-        // Add .reveal to sections and cards for animation
         document.querySelectorAll(
-            '#services .service-card, #portfolio .video-card, #testimonials .testimonial-card, #about .about-grid, #contact .contact-card'
-            ).forEach(el => {
+            '#services .service-card, #portfolio .reel-item, #testimonials .testimonial-card, #about .about-grid, #contact .contact-card'
+        ).forEach(el => {
             el.classList.add('reveal');
             observer.observe(el);
         });
-
-        // Also reveal section headers
         document.querySelectorAll('.section-header').forEach(el => {
             el.classList.add('reveal');
             observer.observe(el);
         });
 
-        // ── video play overlay click to play ──
-        document.querySelectorAll('.video-card .thumb').forEach(thumb => {
-            const video = thumb.querySelector('video');
-            const overlay = thumb.querySelector('.play-overlay');
-            if (video && overlay) {
-                overlay.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (video.paused) {
-                        video.play();
-                    } else {
-                        video.pause();
-                    }
-                });
-                // Also click on video itself to toggle
-                video.addEventListener('click', () => {
-                    if (video.paused) {
-                        video.play();
-                    } else {
-                        video.pause();
-                    }
-                });
-                // Hide overlay when playing, show when paused
-                video.addEventListener('play', () => {
-                    overlay.style.opacity = '0';
-                });
-                video.addEventListener('pause', () => {
-                    if (video.currentTime > 0) {
-                        overlay.style.opacity = '1';
-                    }
-                });
-                // On ended, show overlay
-                video.addEventListener('ended', () => {
+        // ── video play overlay ──
+        document.querySelectorAll('.reel-video-wrap').forEach(wrap => {
+            const video = wrap.querySelector('video');
+            const overlay = wrap.querySelector('.play-overlay');
+            if (!video || !overlay) return;
+
+            // Click overlay → toggle play
+            overlay.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+
+            // Click video → toggle play
+            video.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+
+            // Hide overlay when playing, show when paused (if not ended)
+            video.addEventListener('play', () => {
+                overlay.style.opacity = '0';
+            });
+            video.addEventListener('pause', () => {
+                if (video.currentTime > 0 && !video.ended) {
                     overlay.style.opacity = '1';
-                });
-            }
+                }
+            });
+            video.addEventListener('ended', () => {
+                overlay.style.opacity = '1';
+            });
+
+            // Initially hidden, shown on hover or paused
+        });
+
+        // ── auto-adjust reel aspect ratio based on video metadata ──
+        document.querySelectorAll('.reel-video-wrap video').forEach(video => {
+            video.addEventListener('loadedmetadata', () => {
+                const wrap = video.closest('.reel-video-wrap');
+                if (!wrap) return;
+                const vw = video.videoWidth;
+                const vh = video.videoHeight;
+                if (vw && vh) {
+                    // Set aspect-ratio on the wrap to match the video
+                    const ratio = vw / vh;
+                    wrap.style.aspectRatio = ratio;
+                }
+            });
         });
     </script>
 
